@@ -32,7 +32,12 @@ cd student-project-tracker
 ```
 
 ### 2. Ensure you can connect to the vault Server
+export VAULT_ADDR and VAULT_TOKEN
+
 ```
+export VAULT_ADDR=http://<vaultip>:8200
+export VAULT_TOKEN=<token will be provided in class chat room>
+
 curl http://<vaultip>:8200/v1/sys/health
 ```
 
