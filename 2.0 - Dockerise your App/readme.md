@@ -58,6 +58,14 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
 #Go to: http://<your-VM-public-IP>:8000/docs, ensure Port 8000 is open in the network security group, and confirm this works
 ```
+Start the APP locally
+
+![image](https://github.com/user-attachments/assets/aed139e7-9fb2-42a5-a456-1bdd7fd59fc0)
+
+
+View on the Browser using you Server IP
+
+![image](https://github.com/user-attachments/assets/2cf8a0e7-9cc7-4d0c-8cc2-db6013c55324)
 
 
 ### 4. Build your image
