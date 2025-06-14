@@ -38,10 +38,14 @@ export VAULT_ADDR and VAULT_TOKEN
 export VAULT_ADDR=http://<vaultip>:8200
 export VAULT_TOKEN=<token will be provided in class chat room>
 
+export VAULT_ADDR=http://<your-vault-ip>:8200
+export VAULT_ROLE_ID=<shared-role-id>
+export VAULT_SECRET_ID=<unique-secret-id>
+
 curl http://<vaultip>:8200/v1/sys/health
 ```
 
-***We are using a central db, vault token and IP  will be provided in the Class Group, if you aren't part of the class you can create yours***
+***We are using a central db, vault credentials  will be provided in the Class Group, if you aren't part of the class you can create yours***
 
 
 ### 3. Run Locally 
@@ -73,19 +77,25 @@ A Dockerfile is already provided in the project repo; however, feel free to modi
 
 ✅ Build the image 
 <br>✅ and run it locally<br>
-✅ Push to to your dockerhub 
+✅ Push to your DockerHub 
 
 ***Not familiar with docker? Check out this free course at kodekloud - https://learn.kodekloud.com/user/courses/docker-training-course-for-the-absolute-beginner***
 
 ```bash
+docker login  #enter ur docker cred.
 docker build -t yourdockerhubusername/student-tracker:latest .
-docker run -d -p 8000:8000 --env-file .env yourdockerhubusername/student-tracker:latest
-# Check the app on your broswer or curl http://<your-vm-ip>:8000/docs
+
+# on your current terminal where u exported vault env  or you export them again
+docker run -d -p 8000:8000   -e VAULT_ADDR   -e VAULT_ROLE_ID   -e VAULT_SECRET_ID   <dockerubusername>/student-tracker3:latest
+
+# Check the app on your broswer or curl http://<your-vm-ip>:8000 or confirm your container is running without error docker logs <containerip>
 ```
 #### Push to DockerHub
+Docker file is already on the app folder, feel free to modify to suit ur need. Signup with http://hub.docker.com/ if you don't have an account
+
 
 ```bash
-docker login
+
 docker push yourdockerhubusername/student-tracker: latest
 ```
 
