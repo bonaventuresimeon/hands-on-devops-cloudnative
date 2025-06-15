@@ -86,10 +86,13 @@ docker login  #enter ur docker cred.
 docker build -t yourdockerhubusername/student-tracker:latest .
 
 # on your current terminal where u exported vault env  or you export them again
-docker run -d -p 8000:8000   -e VAULT_ADDR   -e VAULT_ROLE_ID   -e VAULT_SECRET_ID   <dockerubusername>/student-tracker3:latest
+docker run -d -p 8000:8000 -e VAULT_ADDR -e VAULT_ROLE_ID  -e VAULT_SECRET_ID <dockerubusername>/student-tracker:latest
 
 # Check the app on your broswer or curl http://<your-vm-ip>:8000 or confirm your container is running without error docker logs <containerip>
 ```
+![image](https://github.com/user-attachments/assets/2b6cbaec-704f-4ed8-a0bc-345e08764564)
+
+
 #### Push to DockerHub
 Docker file is already on the app folder, feel free to modify to suit ur need. Signup with http://hub.docker.com/ if you don't have an account
 
