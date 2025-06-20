@@ -45,19 +45,61 @@ nodes:
   
 ```
 
-### Create the cluster
 
 ```
 kind create cluster --name <your-clustername> --config kind-config.yaml --image kindest/node:v1.30.0
 
+#Example
 kind create cluster --name muna-cluster --config kind-config.yaml --image kindest/node:v1.30.0
 
 ```
+![alt text](image-3.png)
+
+### Create your first pod using imperative command
+```
+kubectl run mypod --image=nginx --restart=Never
+```
+![alt text](image.png)
+
+### Deploy your app as a pod, using your image 
+
+image in k8s yaml file can be referenced as
+
+```yaml
+image: your-dockerhub-username/your-image-name:tag
+```
+
+Create a Pod YAML File called myapp.yaml and enter this
+
+```yml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp
+spec:
+  containers:
+  - name: myapp-container
+    image: your-dockerhub-username/your-image-name:tag
+    ports:
+    - containerPort: 80
+```
+![alt text](image-1.png)
+
+Apply the file ---> `kubectl apply -f myapp.yaml`
+
+
+
+![alt text](image-2.png)
+
 
 ### Other usefull Command
 
-```
+```bash
 kind delete cluster --name <your-clustername>
 kubectl cluster-info --context kind-<your-clustername>
+
+kubectl get pods
+kubectl describe pod podname
+kubectl logs <podname>
 ```
 

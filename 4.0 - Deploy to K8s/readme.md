@@ -1,5 +1,5 @@
 # Deploy Your to Kubernetes 
-In this Phase we will work on k8s Ingress Features
+In this Phase we will work on k8s app deployment and  Ingress. We deploy your app as deployment and expose externally
 
 - Deploy an app from Docker Hub
 - Expose it using Ingress + NGINX
@@ -7,8 +7,9 @@ In this Phase we will work on k8s Ingress Features
 
 
 ### Prerequisite
-- Your Clustomer was created using Port mapping, ie ensure your cluster kind-config.yaml looks like this
-```
+- Your Cluster is ready and was created using Port mapping, ie ensure your cluster `kind-config.yaml` looks like this
+
+```yml
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
@@ -23,12 +24,15 @@ nodes:
   - role: worker
 
 ```
-otherwise recreate using this config and command below
+Otherwise recreate using this config and command below. First Delete the old cluster and create a `kind-config.yaml` file as shown
 
 ```
+kind delete cluster --name <your-clustername>
+
 kind create cluster --name student-cluster --config kind-config.yaml --image kindest/node:v1.30.0
 
 ```
+
 
 ### Set Up Ingress Controller for Kind
 
@@ -46,13 +50,14 @@ kubectl wait --namespace ingress-nginx \
 
 Create a Deployment file - `student-tracker.yaml` This contains your deployment and your service
 
-```
+```yml
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: student-tracker-app
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: student-tracker-app
@@ -66,7 +71,19 @@ spec:
           image: chisomjude/student-tracker
           ports:
             - containerPort: 80
----
+
+```
+
+Apply the file
+
+```bash
+kubectl apply -f student-tracker.yaml
+
+```
+
+### Create a Service 
+
+```yml
 apiVersion: v1
 kind: Service
 metadata:
@@ -79,19 +96,12 @@ spec:
       port: 80
       targetPort: 80
 
-
-```
-
-Apply the file
-```
-kubectl apply -f student-tracker.yaml
-
 ```
 
 ### Create ingress Resource
 create the file  `student-tracker-ingress.yaml`
 
-```
+```yml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
