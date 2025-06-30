@@ -7,7 +7,7 @@ In this Phase we will work on k8s app deployment and  Ingress. We deploy your ap
 
 
 ### Prerequisite
-- Your Cluster is ready and was created using Port mapping, ie ensure your cluster `kind-config.yaml` looks like this
+- Your Cluster is ready and was created using Port mapping, ie ensure your cluster `kind-config.yaml` looks like this.Including container port mapping . Ensure to add these ports on your security group
 
 ```yml
 kind: Cluster
@@ -21,7 +21,11 @@ nodes:
       - containerPort: 443
         hostPort: 443
         protocol: TCP
+      - containerPort: 31652
+        hostPort: 31652
+        protocol: TCP
   - role: worker
+
 
 ```
 Otherwise recreate using this config and command below. First Delete the old cluster and create a `kind-config.yaml` file as shown
@@ -46,9 +50,25 @@ kubectl wait --namespace ingress-nginx \
 
 ```
 
+### Create  a Secret
+
+```
+# create a file vault-secret.yaml
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: vault-env-secret
+type: Opaque
+stringData:
+  VAULT_ADDR: "http://44.204.193.107:8200"
+  VAULT_ROLE_ID: "f7af58b1-5c22-7c2d-c659-0425d9ce94b2"
+  VAULT_SECRET_ID: "d5f736da-785b-8f5c-9258-48d5d7c43c06"
+```
+
 ### Deploy your APP
 
-Create a Deployment file - `student-tracker.yaml` This contains your deployment and your service
+Create a Deployment file - `student-tracker.yaml`. This contains your deployment and your service
 
 ```yml
 
@@ -57,7 +77,7 @@ kind: Deployment
 metadata:
   name: student-tracker-app
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: student-tracker-app
@@ -71,15 +91,28 @@ spec:
           image: chisomjude/student-tracker
           ports:
             - containerPort: 80
+          env:
+            - name: VAULT_ADDR
+              valueFrom:
+                secretKeyRef:
+                  name: vault-env-secret
+                  key: VAULT_ADDR
+            - name: VAULT_ROLE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: vault-env-secret
+                  key: VAULT_ROLE_ID
+            - name: VAULT_SECRET_ID
+              valueFrom:
+                secretKeyRef:
+                  name: vault-env-secret
+                  key: VAULT_SECRET_ID
 
 ```
 
-Apply the file
+Apply the file using kubectl create -f <filename.yml>
 
-```bash
-kubectl apply -f student-tracker.yaml
 
-```
 
 ### Create a Service 
 
