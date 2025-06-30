@@ -10,24 +10,19 @@ In this Phase we will work on k8s app deployment and  Ingress. We deploy your ap
 - Your Cluster is ready and was created using Port mapping, ie ensure your cluster `kind-config.yaml` looks like this.Including container port mapping . Ensure to add these ports on your security group
 
 ```yml
+# kind-ingress.yaml
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
   - role: control-plane
     extraPortMappings:
-      - containerPort: 80
+      - containerPort: 80   # For Ingress HTTP
         hostPort: 80
-        protocol: TCP
-      - containerPort: 443
+      - containerPort: 443  # For Ingress HTTPS (optional)
         hostPort: 443
-        protocol: TCP
-      - containerPort: 31652
-        hostPort: 31652
-        protocol: TCP
   - role: worker
-
-
 ```
+
 Otherwise recreate using this config and command below. First Delete the old cluster and create a `kind-config.yaml` file as shown
 
 ```
