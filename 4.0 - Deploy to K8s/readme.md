@@ -1,5 +1,5 @@
 # Deploy Your to Kubernetes 
-In this Phase we will work on k8s app deployment and  Ingress. We deploy your app as deployment and expose externally
+In this Phase we will work on k8s app deployment and  Ingress. We deploy your app as a deployment and expose it externally
 
 - Deploy an app from Docker Hub
 - Expose it using Ingress + NGINX
@@ -7,7 +7,7 @@ In this Phase we will work on k8s app deployment and  Ingress. We deploy your ap
 
 
 ### Prerequisite
-- Your Cluster is ready and was created using Port mapping, ie ensure your cluster `kind-config.yaml` looks like this.Including container port mapping . Ensure to add these ports on your security group
+- Your Cluster is ready and was created using Port mapping, ie ensure your cluster `kind-config.yaml` looks like this. Including container port mapping. Ensure to add these ports to your security group
 
 ```yml
 # kind-ingress.yaml
